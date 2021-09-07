@@ -1,0 +1,43 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.note_tech_geeks_android.NoteListActivity">
+    <!--item for our search view with its id-->
+    <item
+        android:id="@+id/actionSearch_notes"
+        android:icon="@android:drawable/ic_menu_search"
+        android:title="Search"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="always|collapseActionView" />
+    <item
+        android:title="Sort By:"
+        >
+        <group
+            android:id="@+id/sort_group"
+            >
+            <item
+                android:id="@+id/asc_name"
+                android:orderInCategory="100"
+                android:title="Title A-Z"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/desc_name"
+                android:orderInCategory="100"
+                android:title="Title Z-A"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/asc_date"
+                android:orderInCategory="100"
+                android:title="Newest Date"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/desc_date"
+                android:orderInCategory="100"
+                android:title="Oldest Date"
+                app:showAsAction="never" />
+
+        </group>
+    </item>
+
+
+</menu>
