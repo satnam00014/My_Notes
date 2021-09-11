@@ -57,12 +57,10 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         alertDialog.show();
         view.findViewById(R.id.cancel_folder_dialog_bt).setOnClickListener(v -> {
-            Toast.makeText(this,"Cancel clicked",Toast.LENGTH_SHORT).show();
             alertDialog.dismiss();
         });
         view.findViewById(R.id.create_folder_dialog_bt).setOnClickListener(v -> {
             //Logic to add folder
-            Toast.makeText(this,"Create clicked",Toast.LENGTH_SHORT).show();
             String folderName = title.getText().toString().trim();
             if (folderName.isEmpty()){
                 title.setError("Folder name cannot be empty");

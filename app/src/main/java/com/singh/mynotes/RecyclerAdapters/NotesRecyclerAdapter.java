@@ -74,7 +74,6 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NotesRecyclerAdap
             context.startActivity(intent);
         });
         holder.deleteButton.setOnClickListener(v -> {
-            Toast.makeText(context,"Delete clicked",Toast.LENGTH_SHORT).show();
             deleteNoteDialog(noteList.get(position));
         });
         holder.currentCardView.setOnClickListener(v -> {

@@ -43,7 +43,6 @@ public class NoteListActivity extends AppCompatActivity {
 
         //setting for recycler view and adapter for that
         setRecyclerView();
-        Toast.makeText(this,"Folder id is : "+folderId,Toast.LENGTH_SHORT).show();
     }
 
     @Override

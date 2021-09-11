@@ -20,13 +20,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
 import com.singh.mynotes.models.Note;
 import com.singh.mynotes.viewmodel.NoteViewModel;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -48,6 +51,8 @@ public class CreateNoteActivity extends AppCompatActivity  {
     private ImageView imageView;
     private Bitmap bitmap;
     private InputMethodManager inputMethodManager;
+    private Uri imageUri;
+    private String tempImagePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +60,6 @@ public class CreateNoteActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_create_note);
 
         folderId = getIntent().getIntExtra("folderId",-1);
-        Toast.makeText(this,"Folder id is : "+folderId,Toast.LENGTH_SHORT).show();
         noteViewModel = new ViewModelProvider(this).get(NoteViewModel.class);
         SimpleDateFormat formatter= new SimpleDateFormat("dd/M/yyyy hh:mm aa");
 
@@ -69,11 +73,6 @@ public class CreateNoteActivity extends AppCompatActivity  {
         subjectEditText = findViewById(R.id.note_subject_create);
         contentEditText = findViewById(R.id.note_detail_create);
         imageView = findViewById(R.id.image_note_create);
-        imageView.setOnClickListener(v -> {
-            //Logic to open full screen zoomable image.
-            Intent intent = new Intent(this,FullScreenImage.class);
-            startActivity(intent);
-        });
         //following function bind buttons of camera and gallery
         bindCameraGalleryButton();
 
@@ -119,8 +118,25 @@ public class CreateNoteActivity extends AppCompatActivity  {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, REQUEST_CODE_CAMERA_PERMISSION);
                 return;
             }
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(intent,REQUEST_CODE_CAMERA);
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                // Create the File where the photo should go
+                File photoFile = null;
+                try {
+                    photoFile = createImageFile();
+                } catch (IOException ex) {
+                    // Error occurred while creating the File
+                    ex.printStackTrace();
+                }
+                // Continue only if the File was successfully created
+                if (photoFile != null) {
+                    imageUri = FileProvider.getUriForFile(this,
+                            "com.example.android.fileprovider",
+                            photoFile);
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                    startActivityForResult(takePictureIntent, REQUEST_CODE_CAMERA);
+                }
+            }
         });
 
         findViewById(R.id.gallery_button_create).setOnClickListener(v -> {
@@ -134,27 +150,45 @@ public class CreateNoteActivity extends AppCompatActivity  {
         });
 
     }
-
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String imageFileName = "tempImage";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+        //path of temp file that is use to delete the original file
+        //after getting and converting image to bitmap
+        tempImagePath = image.getAbsolutePath();
+        return image;
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent backIntent) {
         super.onActivityResult(requestCode, resultCode, backIntent);
 
         if (requestCode == REQUEST_CODE_CAMERA){  //back from camera
             if (resultCode == RESULT_OK) {
-                bitmap = (Bitmap) (backIntent.getExtras().get("data"));
-                imageView.setImageBitmap(bitmap);
-                Toast.makeText(this,"Image added from Camera",Toast.LENGTH_SHORT).show();
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),imageUri);
+//                    following lines are to delete temp file for saving image from camera
+                    File file = new File(tempImagePath);
+                    file.delete();
+                    imageView.setImageBitmap(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         } else if (requestCode == REQUEST_CODE_GALLERY){ //back from gallery
             if (resultCode == RESULT_OK) {
                 try {
-                    Uri uri = backIntent.getData();
+                    imageUri = backIntent.getData();
                     //following to convert from uri to bitmap
-                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
                     //following is to get and show image through URI in image view
                     //imv1.setImageURI(uri);
                     imageView.setImageBitmap(bitmap);
-                    Toast.makeText(this,"Image added from Gallery",Toast.LENGTH_SHORT).show();
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 }
@@ -168,12 +202,12 @@ public class CreateNoteActivity extends AppCompatActivity  {
         File myDir = new File(root);
         myDir.mkdirs();
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String fname = "Image"+ timeStamp +"_.jpeg";
+        String fname = "Image"+ timeStamp +"_.webp";
         File file = new File(myDir, fname);
         if (file.exists()) file.delete ();
         try {
             FileOutputStream out = new FileOutputStream(file);
-            finalBitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
+            finalBitmap.compress(Bitmap.CompressFormat.WEBP, 60, out);
             out.flush();
             out.close();
             return file.getAbsolutePath();
