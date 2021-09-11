@@ -1,6 +1,7 @@
 package com.singh.mynotes;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageButton;
 
 import android.os.Bundle;
 
@@ -11,14 +12,14 @@ import com.ortiz.touchview.TouchImageView;
 
 public class FullScreenImage extends AppCompatActivity {
 
-    private FloatingActionButton closeButton;
+    private AppCompatImageButton closeButton;
     private TouchImageView imageView;
     private String imagePath;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_full_screen_image);
-        closeButton = findViewById(R.id.close_button);
+        closeButton = findViewById(R.id.close_btn);
         imageView = findViewById(R.id.fullscreen_imageview);
         imagePath = getIntent().getStringExtra("imagePath");
         if (!(imagePath == null || imagePath.equals(""))){

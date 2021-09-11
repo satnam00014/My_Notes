@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
@@ -62,11 +63,13 @@ public class EditNoteActivity extends AppCompatActivity {
                 });
                 imageView.setOnLongClickListener(v ->{
                     //logic for long click to share photo with other applications
-                    Intent shareIntent = new Intent();
-                    shareIntent.setAction(Intent.ACTION_SEND);
-                    shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
-                    shareIntent.setType("image/jpeg");
-                    startActivity(Intent.createChooser(shareIntent, "Share Images"));
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    Uri fileUri = FileProvider.getUriForFile(this,"com.example.android.fileprovider",file);
+                    intent.setDataAndType(fileUri,"image/*");
+                    intent.putExtra(Intent.EXTRA_STREAM,fileUri);
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    startActivity(Intent.createChooser(intent, "Share Image:"));
+
                     return false;
                 });
             }

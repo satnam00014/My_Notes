@@ -149,7 +149,6 @@
             android:id="@+id/image_note_create"
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:tooltipText="Image view for photo"
             android:background="@drawable/edittext_background"
             android:src="@drawable/no_image_available"
             android:layout_marginBottom="20dp"
