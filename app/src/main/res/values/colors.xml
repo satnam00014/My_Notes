@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="red_dark_delete">@android:color/holo_red_dark</color>
-    <color name="blue_background">#bad5ff</color>
+    <color name="blue_background">@android:color/holo_blue_light</color>
     <color name="blue_border">#0057DE</color>
     <color name="purple_200">@android:color/holo_blue_bright</color>
     <color name="purple_500">@android:color/holo_blue_light</color>
