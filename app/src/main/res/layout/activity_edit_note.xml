@@ -85,7 +85,7 @@
                 android:textColor="@color/black"
                 android:layout_marginStart="20dp"
                 />
-            <!-- following edittext is scrollable due to last three lines -->
+            <!-- following  edittext is scrollable due to last three lines -->
             <EditText
                 android:id="@+id/note_detail_edit"
                 android:layout_width="match_parent"
