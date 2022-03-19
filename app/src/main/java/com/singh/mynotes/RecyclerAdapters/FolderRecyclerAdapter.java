@@ -44,7 +44,7 @@ public class FolderRecyclerAdapter extends RecyclerView.Adapter<FolderRecyclerAd
         Collections.sort(folderWithNotes,(o1, o2) -> o1.folder.getTitle().toLowerCase().compareTo(o2.folder.getTitle().toLowerCase()));
         this.folderWithNotes = folderWithNotes;
         this.totalFolderWithNotes = folderWithNotes;
-        //not sure about below line
+        //Below line is to call folderViewModel class and is only used once to delete whole folder.
         folderViewModel = new ViewModelProvider((ViewModelStoreOwner) context).get(FolderViewModel.class);
     }
 
