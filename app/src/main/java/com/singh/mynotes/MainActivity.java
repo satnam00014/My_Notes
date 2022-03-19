@@ -26,7 +26,7 @@ import com.singh.mynotes.models.Folder;
 import com.singh.mynotes.viewmodel.FolderViewModel;
 
 public class MainActivity extends AppCompatActivity {
-    FolderViewModel folderViewModel;
+    private FolderViewModel folderViewModel;
     //reference for recyclerView and adapter for that
     private RecyclerView recyclerView;
     private FolderRecyclerAdapter folderRecyclerAdapter;

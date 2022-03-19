@@ -44,6 +44,7 @@ public class FolderRecyclerAdapter extends RecyclerView.Adapter<FolderRecyclerAd
         Collections.sort(folderWithNotes,(o1, o2) -> o1.folder.getTitle().toLowerCase().compareTo(o2.folder.getTitle().toLowerCase()));
         this.folderWithNotes = folderWithNotes;
         this.totalFolderWithNotes = folderWithNotes;
+        //not sure about below line
         folderViewModel = new ViewModelProvider((ViewModelStoreOwner) context).get(FolderViewModel.class);
     }
 
@@ -97,6 +98,8 @@ public class FolderRecyclerAdapter extends RecyclerView.Adapter<FolderRecyclerAd
 
         //following is to set number of notes in folder.
         holder.numberOfNotes.setText(folderWithNotes.get(position).notes.size() + " - Notes");
+
+        //following is to set images
         Glide.with(context).load(R.drawable.folder_icon)
                 .apply(RequestOptions.circleCropTransform()).thumbnail(0.3f).into(holder.folderImageView);
         holder.deleteButton.setOnClickListener(v -> {
@@ -124,7 +127,7 @@ public class FolderRecyclerAdapter extends RecyclerView.Adapter<FolderRecyclerAd
         final AlertDialog alertDialog = builder.create();
         //following is to disable dismiss if user touches outside the dialog box area
         alertDialog.setCanceledOnTouchOutside(false);
-        //following is to add transparent background for roundedges other wise white corner will be shown
+        //following is to add transparent background for round edges other wise white corner will be shown
         alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         alertDialog.show();
         view.findViewById(R.id.cancel_folder_delete_dialog_bt).setOnClickListener(v -> {
